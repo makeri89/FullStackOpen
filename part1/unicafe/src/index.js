@@ -9,12 +9,11 @@ const Button = ({ text, click }) => {
   )
 }
 
-const App = () => {
+const Statistics = (props) => {
 
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-  const [positive, setPositive] = useState(0)
 
   const handleGoodClick = () => {
     setGood(good + 1)
@@ -48,6 +47,12 @@ const App = () => {
         positive {positives} %
       </p>
     </div>
+  )
+}
+
+const App = () => {
+  return (
+    Statistics()
   )
 }
 
