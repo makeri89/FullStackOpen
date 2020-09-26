@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Names from './components/Names.jsx'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 
 
@@ -9,7 +10,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newSearch, setNewSearch ] = useState('')
-  const [infoMessage, setInfoMessage] = useState('something was done')
+  const [infoMessage, setInfoMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -26,32 +27,47 @@ const App = () => {
       number: newNumber
     }
 
-    personService
-      .create(nameObject)
-      .then(response => {
-        setPersons(persons.concat(response.data))
-        setNewName('')
-        setNewNumber('')
+    const checkSame = persons.filter(i => i.name.toLowerCase() === (newName.toLowerCase()))
+    const id = checkSame[0].id
+
+    if (checkSame.length > 0) {
+      if (window.confirm(`${newName} is already added to phonebook, replace old number with a new one?`)) {
+        console.log(id)
+        personService
+          .update(id, nameObject)
+          .then(response => {
+            setPersons(
+              persons.map(person => 
+                person.id !== response.data.id ? person : response.data)
+            )
+            console.log(response.data)
+            setNewName('')
+            setNewNumber('')
+        })
+
+        setInfoMessage(`Updated ${newName}`)
+        setTimeout(() => {
+          setInfoMessage(null)
+        }, 2000)
+      }
+    } else {
+      personService
+        .create(nameObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
       })
       
-    setInfoMessage(
-      `Added ${newName}`
-    )
-    setTimeout(() => {
-      setInfoMessage(null)
-    }, 2000)
-  }
-
-  const Notification = ({ message }) => {
-    if (message === null) {
-      return null
+      setInfoMessage(
+        `Added ${newName}`
+      )
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 2000)
     }
 
-    return (
-      <div className='info'>
-        {message}
-      </div>
-    )
+    
   }
 
   const handleDelete = (e) => {
