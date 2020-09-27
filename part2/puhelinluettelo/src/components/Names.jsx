@@ -2,7 +2,9 @@ import React from 'react'
 import Name from './Name'
 
 const Names = ({ persons, newSearch, onDelete }) => {
-  const filtered = persons.filter(person => person.name.toLowerCase().includes(newSearch.toLowerCase()))
+  const filtered = persons.filter(person => person.name.toLowerCase()
+  .includes(newSearch.toLowerCase()))
+  
   return (
     <div>
       {filtered.map(name => 

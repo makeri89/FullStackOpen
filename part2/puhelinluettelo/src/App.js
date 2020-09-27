@@ -3,8 +3,6 @@ import Names from './components/Names.jsx'
 import personService from './services/persons'
 import Notification from './components/Notification'
 
-
-
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
@@ -28,9 +26,9 @@ const App = () => {
     }
 
     const checkSame = persons.filter(i => i.name.toLowerCase() === (newName.toLowerCase()))
-    const id = checkSame[0].id
-
+    
     if (checkSame.length > 0) {
+      const id = checkSame[0].id
       if (window.confirm(`${newName} is already added to phonebook, replace old number with a new one?`)) {
         console.log(id)
         personService
@@ -73,9 +71,13 @@ const App = () => {
   const handleDelete = (e) => {
     e.preventDefault()
     const id = parseInt(e.target.value)
-    personService.remove(persons[id - 1])
+    const itemToRemove = persons.filter(person => person.id === id)
+    console.log(itemToRemove)
+    const indexOfRemove = persons.indexOf(itemToRemove[0])
+    console.log(indexOfRemove)
+    personService.remove(persons[indexOfRemove])
     setPersons(persons.filter(person => person.id !== id))
-    setInfoMessage(`Removed ${persons[id-1].name}`)
+    setInfoMessage(`Removed ${persons[indexOfRemove].name}`)
     setTimeout(() => {
       setInfoMessage(null)
     }, 2000)
