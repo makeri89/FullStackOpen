@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Names from './components/Names.jsx'
 import personService from './services/persons'
 import Notification from './components/Notification'
+import Errormessage from './components/Errormessage.jsx'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
@@ -9,6 +10,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ newSearch, setNewSearch ] = useState('')
   const [infoMessage, setInfoMessage] = useState(null)
+  const [ errorMessage, setErrorMessage ] = useState(null)
 
   useEffect(() => {
     personService
@@ -55,14 +57,22 @@ const App = () => {
           setPersons(persons.concat(response.data))
           setNewName('')
           setNewNumber('')
-      })
+        })
+        .catch(error => {
+          setErrorMessage('The minimum length for a name is 3 chracters and 8 for a phone number')
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 3000)
+        })
+      if (errorMessage === null) {
+        setInfoMessage(
+          `Added ${newName}`
+        )
+        setTimeout(() => {
+          setInfoMessage(null)
+        }, 2000)
+      }
       
-      setInfoMessage(
-        `Added ${newName}`
-      )
-      setTimeout(() => {
-        setInfoMessage(null)
-      }, 2000)
     }
 
     
@@ -70,7 +80,9 @@ const App = () => {
 
   const handleDelete = (e) => {
     e.preventDefault()
-    const id = parseInt(e.target.value)
+    const id = e.target.value
+    console.log(persons)
+    console.log(id)
     const itemToRemove = persons.filter(person => person.id === id)
     console.log(itemToRemove)
     const indexOfRemove = persons.indexOf(itemToRemove[0])
@@ -99,6 +111,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <Notification message={infoMessage} />
+      <Errormessage message={errorMessage} />
       filter shown with<input type='text' onChange={handleSearchChange}></input>
       <h2>add a new</h2>
       <form onSubmit={handleButtonClick}>
