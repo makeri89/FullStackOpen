@@ -110,7 +110,7 @@ describe('adding blogs', () => {
     })
 })
 
-describe('deleting blogs', async () => {
+describe('deleting blogs', () => {
     let token = null
     beforeEach(async () => {
         await Blog.deleteMany({})
