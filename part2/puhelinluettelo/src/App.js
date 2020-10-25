@@ -81,9 +81,7 @@ const App = () => {
   const handleDelete = (e) => {
     e.preventDefault()
     const id = e.target.value
-    console.log(persons)
-    console.log(id)
-    const itemToRemove = persons.filter(person => person.id === id)
+    const itemToRemove = persons.filter(person => person.id == id)
     console.log(itemToRemove)
     const indexOfRemove = persons.indexOf(itemToRemove[0])
     console.log(indexOfRemove)
