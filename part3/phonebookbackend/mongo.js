@@ -9,8 +9,8 @@ const password = process.argv[2]
 const name = process.argv[3]
 const number = process.argv[4]
 
-const url = 
-    `mongodb+srv://fullstack:${password}@cluster0.kums7.mongodb.net/<dbname>?retryWrites=true&w=majority`
+const url =
+    `mongodb+srv://fullstack:${password}@cluster0.kums7.mongodb.net/Phonebook?retryWrites=true&w=majority`
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
