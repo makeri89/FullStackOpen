@@ -19,6 +19,8 @@ const Blog = ({ blog, doALike, doADelete, user }) => {
     whatToShow = ''
   }
 
+  const loggedUser = JSON.parse(window.localStorage.getItem('loggedBloglistUser'))
+  
   const showDeleteStyle = {
     display: whatToShow
   }
@@ -31,7 +33,9 @@ const Blog = ({ blog, doALike, doADelete, user }) => {
         <p>This blog can be found at <a href={blog.url}>{blog.url}</a></p>
         <p>This blog has {blog.likes} likes<button value={blog.id} onClick={doALike} id='likeButton'>like</button></p>
         <button onClick={() => setShowFullInfo(false)}>hide</button>
+        {loggedUser.username === user.username &&
         <button onClick={doADelete} value={blog.id} style={showDeleteStyle} id='deleteButton'>delete</button>
+        }
       </div>
     )
   }
