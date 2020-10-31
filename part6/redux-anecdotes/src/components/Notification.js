@@ -15,7 +15,7 @@ const Notification = () => {
     <div>
       {notification !== '' && (
       <div style={style}>
-        {notification}
+        {notification.message}
       </div>
       )}
     </div>
