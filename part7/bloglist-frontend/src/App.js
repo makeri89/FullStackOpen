@@ -90,17 +90,20 @@ const App = () => {
     storage.logoutUser()
   }
 
+  // Get the correct user for single user view
   const userMatch = useRouteMatch('/users/:id')
   const userById = userMatch
   ? users.find(user => user.id === userMatch.params.id)
   : null
 
+  // Get the correct blog for single blog view
   const blogMatch = useRouteMatch('/blogs/:id')
   console.log('blogmatch', blogMatch)
   const blogById = blogMatch
   ? blogs.find(blog => blog.id == blogMatch.params.id)
   : null
 
+  // If not logged in, render login view
   if (!user) {
     return (
       <div class='container'>
@@ -110,7 +113,6 @@ const App = () => {
 
         <form onSubmit={handleLogin} class='form-group d-flex flex-wrap flex-column justify-content-center'>
           <div class='p-3 mx-auto'>
-            {/* <label for='username'>Username:</label> */}
             <input
               class='form-control form-control-lg shadow-lg'
               id='username'
@@ -120,7 +122,6 @@ const App = () => {
             />
           </div>
           <div class='p-3 mx-auto'>
-            {/* <label for='password'>Password:</label> */}
             <input
               class='form-control form-control-lg shadow-lg'
               id='password'
@@ -139,10 +140,7 @@ const App = () => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
-  const style = {
-    paddingRight: 5
-  }
-
+  // Checks if user logged in has the right to remove the blog
   const checkIfRemovable = () => {
     if (blogById === null || blogById === undefined) {
       return false
@@ -190,16 +188,14 @@ const App = () => {
             </Togglable>
               <ul class='list-group list-group-flush'>
                 {blogs.sort(byLikes).map(blog =>
-                <li class='list-group-item list-group-item-action bg-transparent mt-3 rounded-lg shadow'>
-                  <Blog
-                    key={blog.id}
-                    blog={blog}
-                  />
-                </li>
+                  <li class='list-group-item list-group-item-action bg-transparent mt-3 rounded-lg shadow'>
+                    <Blog
+                      key={blog.id}
+                      blog={blog}
+                    />
+                  </li>
                 )}
               </ul>
-              
-            
           </div>
         </Route>
       </Switch>
