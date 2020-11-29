@@ -1,11 +1,16 @@
 import React from 'react';
 
-const Total = (props) => {
+import { CoursePart } from '../types';
+
+interface TotalProps {
+    exercises: CoursePart[];
+}
+
+const Total: React.FC<TotalProps> = ({ exercises }) => {
+    const sum = exercises.reduce((carry, part) => carry + part.exerciseCount, 0);
     return (
-        <div>
-            Number of exercises {props.exercises}
-        </div>
-    );
-};
+        <h2>Number of exercises in total {sum}</h2>
+    )
+}
 
 export default Total;

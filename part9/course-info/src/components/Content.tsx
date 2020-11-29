@@ -1,11 +1,20 @@
 import React from 'react';
 
-const Content = (props) => {
+import { CoursePart } from '../types';
+import Part from './Part';
+
+interface ContentProps {
+    courseparts: CoursePart[];
+}
+
+const Content: React.FC<ContentProps> = ({ courseparts }) => {
     return (
         <div>
-            {props.name} {props.exercises}
+            {courseparts.map(part => (
+                <Part key={part.name} coursepart={part} />
+            ))}
         </div>
-    );
-};
+    )
+}
 
 export default Content;
