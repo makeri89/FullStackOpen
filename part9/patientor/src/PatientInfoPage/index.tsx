@@ -1,16 +1,41 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Icon } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
-import { Diagnosis, Patient } from '../types';
+import { Diagnosis, Entry, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
-import { useStateValue, setPatient, setDiagnosesList } from '../state';
+import { useStateValue, setPatient, setDiagnosesList, addEntry } from '../state';
 import EntryDetails from './EntryDetails';
+import { EntryFormValues } from './AddEntryForm';
+import AddEntry from './AddEntry';
 
 const PatientInfoPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [{ patient, diagnoses }, dispatch] = useStateValue();
+    
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<string | undefined>();
+
+    const openModal = (): void => setModalOpen(true);
+    const closeModal = (): void => {
+        setModalOpen(false);
+        setError(undefined);
+    }
+
+    const submitNewEntry = async (values: EntryFormValues) => {
+        try {
+            const { data: newEntry } = await axios.post<Entry>(
+                `${apiBaseUrl}/patients/${id}/entries`,
+                values
+            );
+            dispatch(addEntry(newEntry, id));
+            closeModal();
+        } catch (e) {
+            console.error(e.response.data);
+            setError(e.response.data.error);
+        }
+    }
 
     const genders = {
         male: 'mars' as 'mars',
@@ -53,10 +78,6 @@ const PatientInfoPage: React.FC = () => {
         )
     }
 
-    const getDiagnosisInfo = (code: string): string => {
-        return diagnoses[code].name;
-    };
-
     return (
         <div>
             <h1>{patient.name}<Icon name={genders[patient.gender]} /></h1>
@@ -72,18 +93,16 @@ const PatientInfoPage: React.FC = () => {
             <h4>entries</h4>
             {patient.entries.map(entry => 
                 <div key={entry.id}>
-                    {/* <p>{entry.date}</p>
-                    <ul>
-                        {entry.diagnosisCodes && 
-                        entry.diagnosisCodes.map(code =>
-                            <li key={code}>
-                                {code} {getDiagnosisInfo(code)}
-                            </li>
-                        )}
-                    </ul> */}
                     <EntryDetails entry={entry} diagnoses={diagnoses}/>
                 </div>
             )}
+            <AddEntry
+                modalOpen={modalOpen}
+                onSubmit={submitNewEntry}
+                error={error}
+                onClose={closeModal}
+            />
+            <Button size='massive' onClick={() => openModal()}>Add new entry</Button>
         </div>
     )
 

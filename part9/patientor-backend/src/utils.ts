@@ -68,7 +68,7 @@ const isEntryType = (entry: any): entry is Entry => {
 
 const parseEntry = (entry: any): NewEntry => {
     if (!entry || !isEntryType(entry)) {
-        throw new Error('Incorrect entry type' + entry);
+        throw new Error('Incorrect entry type: ' + Object.values(entry));
     }
     return entry;
 };

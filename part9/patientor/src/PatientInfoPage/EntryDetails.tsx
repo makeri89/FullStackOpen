@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Entry, Diagnosis } from '../types';
+import { Entry } from '../types';
 
 import HospitalData from './HospitalData';
 import HealthCheckData from './HealthCheckData';
