@@ -9,7 +9,11 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const [addBook] = useMutation(ADD_BOOK)
+  const [addBook] = useMutation(ADD_BOOK, {
+    update: (store, response) => {
+      props.updateCacheWith(response.data.addBook)
+    }
+  })
 
   if (!props.show) {
     return null
@@ -20,7 +24,6 @@ const NewBook = (props) => {
 
     const pubInt = Number(published)
     
-    console.log('add book...')
     addBook({
       variables: { title, author, published: pubInt, genres },
       refetchQueries: [
